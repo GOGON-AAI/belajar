@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Detail Guru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-800 text-white text-center py-6">
+        <h1 class="text-3xl font-bold">Detail Guru</h1>
+    </header>
+    <div class="container mx-auto mt-10 px-4">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex items-center space-x-4">
+                <img alt="Foto Guru {{ guru.nama_guru }}" class="rounded-full w-24 h-24" src="{{ url_for('static', filename='uploads/' + guru.foto) if guru.foto else 'default_image_url.jpg' }}"/>
+                <div>
+                    <h3 class="text-xl font-bold">{{ guru.nama_guru }}</h3>
+                    <p class="text-gray-600">NIP: {{ guru.nip }}</p>
+                    <p class="text-gray-600">{{ guru.mata_pelajaran }}</p>
+                </div>
+            </div>
+            <p class="mt-4 text-gray-600">Alamat: {{ guru.alamat }}</p>
+            <p class="text-gray-600">No Telepon: {{ guru.no_telepon }}</p>
+        </div>
+        <div class="mt-6 text-center">
+            <a href="{{ url_for('index') }}" class="bg-blue-800 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition duration-300">Kembali ke Halaman Utama</a>
+        </div>
+    </div>
+</body>
+</html>

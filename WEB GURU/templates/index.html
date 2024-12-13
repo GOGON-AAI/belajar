@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Halaman Utama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-800 text-white text-center py-6">
+        <h1 class="text-3xl font-bold">Halaman Utama</h1>
+    </header>
+    <div class="container mx-auto mt-10 px-4">
+        <!-- Tombol navigasi -->
+        <div class="flex justify-center space-x-4 mb-8">
+            <button class="bg-blue-800 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition duration-300" onclick="location.href='/create-guru'">
+                <i class="fas fa-user-plus mr-2"></i> Tambah Data Guru
+            </button>
+            <button class="bg-blue-800 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition duration-300" onclick="location.href='/user'">
+                <i class="fas fa-user mr-2"></i> Akun
+            </button>
+            <button class="bg-blue-800 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition duration-300" onclick="location.href='/buat-laporan'">
+                <i class="fas fa-file-alt mr-2"></i> Buat Laporan
+            </button>
+        </div>
+
+        <!-- Data guru -->
+        <h2 class="text-2xl font-bold mb-6 text-center">Data Guru</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for guru in data_guru %}
+            <div class="bg-white shadow-md rounded-lg p-6 cursor-pointer" onclick="openModal({{ guru.id_guru }})">
+                <div class="flex items-center space-x-4">
+                    <img alt="Foto Guru {{ guru.nama_guru }}" class="rounded-full w-24 h-24" src="{{ url_for('static', filename='uploads/' + guru.foto) if guru.foto else url_for('static', filename='default_image_url.jpg') }}"/>
+                    <div>
+                        <h3 class="text-xl font-bold">{{ guru.nama_guru }}</h3>
+                        <p class="text-gray-600">NIP: {{ guru.nip }}</p>
+                        <p class="text-gray-600">{{ guru.mata_pelajaran }}</p>
+                    </div>
+                </div>
+                <p class="mt-4 text-gray-600">Alamat: {{ guru.alamat }}</p>
+                <p class="text-gray-600">No Telepon: {{ guru.no_telepon }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal untuk menampilkan detail guru -->
+    <div id="guruModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-8 rounded-lg max-w-lg w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Detail Guru</h2>
+                <button onclick="closeModal()" class="text-gray-500 text-xl">&times;</button>
+            </div>
+            <div id="guruDetailContent">
+                <!-- Detail guru akan dimuat di sini -->
+            </div>
+            <!-- Tombol Edit dan Hapus -->
+            <div class="flex justify-between mt-4">
+                <a id="editButton" href="#" class="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300">
+                    <i class="fas fa-edit mr-2"></i> Edit
+                </a>
+                <a id="deleteButton" href="#" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">
+                    <i class="fas fa-trash-alt mr-2"></i> Hapus
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk membuka modal dan menampilkan data guru
+        function openModal(id_guru) {
+            fetch(`/guru-detail/${id_guru}`)
+                .then(response => response.json())
+                .then(data => {
+                    const modal = document.getElementById('guruModal');
+                    const detailContent = document.getElementById('guruDetailContent');
+                    const editButton = document.getElementById('editButton');
+                    const deleteButton = document.getElementById('deleteButton');
+
+                    detailContent.innerHTML = `
+                        <img alt="Foto Guru" class="rounded-full w-32 h-32 mx-auto mb-4" src="/static/uploads/${data.foto}" />
+                        <p><strong>Nama:</strong> ${data.nama_guru}</p>
+                        <p><strong>NIP:</strong> ${data.nip}</p>
+                        <p><strong>Alamat:</strong> ${data.alamat}</p>
+                        <p><strong>No Telepon:</strong> ${data.no_telepon}</p>
+                        <p><strong>Mata Pelajaran:</strong> ${data.mata_pelajaran}</p>
+                    `;
+
+                    // Menambahkan link untuk Edit dan Hapus
+                    editButton.href = `/edit-guru/${id_guru}`;
+                    deleteButton.href = `/delete-guru/${id_guru}`;
+
+                    modal.classList.remove('hidden');
+                });
+        }
+
+        // Fungsi untuk menutup modal
+        function closeModal() {
+            const modal = document.getElementById('guruModal');
+            modal.classList.add('hidden');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('guruModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Edit Data Guru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-800 text-white text-center py-6">
+        <h1 class="text-3xl font-bold">Edit Data Guru</h1>
+    </header>
+    <div class="container mx-auto mt-10 px-4">
+        <form action="/edit-guru/{{ guru.id_guru }}" method="POST" enctype="multipart/form-data">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="mb-4">
+                    <label for="nama_guru" class="block text-sm font-bold text-gray-700">Nama Guru</label>
+                    <input type="text" name="nama_guru" id="nama_guru" class="w-full p-3 border rounded-lg" value="{{ guru.nama_guru }}" required />
+                </div>
+                <div class="mb-4">
+                    <label for="nip" class="block text-sm font-bold text-gray-700">NIP</label>
+                    <input type="text" name="nip" id="nip" class="w-full p-3 border rounded-lg" value="{{ guru.nip }}" required />
+                </div>
+                <div class="mb-4">
+                    <label for="alamat" class="block text-sm font-bold text-gray-700">Alamat</label>
+                    <textarea name="alamat" id="alamat" class="w-full p-3 border rounded-lg" rows="3" required>{{ guru.alamat }}</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="no_telepon" class="block text-sm font-bold text-gray-700">No Telepon</label>
+                    <input type="text" name="no_telepon" id="no_telepon" class="w-full p-3 border rounded-lg" value="{{ guru.no_telepon }}" required />
+                </div>
+                <div class="mb-4">
+                    <label for="mata_pelajaran" class="block text-sm font-bold text-gray-700">Mata Pelajaran</label>
+                    <input type="text" name="mata_pelajaran" id="mata_pelajaran" class="w-full p-3 border rounded-lg" value="{{ guru.mata_pelajaran }}" required />
+                </div>
+                <div class="mb-4">
+                    <label for="foto" class="block text-sm font-bold text-gray-700">Foto</label>
+                    <input type="file" name="foto" id="foto" class="w-full p-3 border rounded-lg" accept="image/*" />
+                    {% if guru.foto %}
+                        <img src="{{ url_for('static', filename='uploads/' + guru.foto) }}" class="mt-4" width="100" alt="Foto Guru">
+                    {% endif %}
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-blue-800 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition duration-300">
+                        <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                    </button>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <button onclick="location.href='/'" class="bg-white text-blue-800 border border-blue-800 py-2 px-4 rounded-lg hover:bg-gray-200 transition duration-300">
+                        Kembali ke Halaman Utama
+                    </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
